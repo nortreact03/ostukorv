@@ -1,23 +1,44 @@
-import logo from './logo.svg';
 import './App.css';
+import Ostukorv from './Ostukorv';
+import {useState} from 'react'
+import UusOst from './UusOst'
 
 function App() {
+  const [ostud, setOstud] = useState([
+    {nimetus: 'Pirnid', yhik: 'kg', kogus: 1, korvis: true },
+    {nimetus: 'Leib', yhik: 'tk', kogus: 1, korvis: false },
+  ])
+
+  const toggleKasKorvis = (index) => {
+    console.log('Klikiti real ' + index)
+    const uusMassiiv = ostud.map((ost, i)=>{
+      if (index !== i) {
+        return ost;
+      }
+      ost.korvis = !ost.korvis
+      return ost;
+    });
+
+    setOstud(uusMassiiv)
+  }
+
+  const lisaToode = (nimetus, kogus, yhik) => {
+    const uusToode = {
+      nimetus,
+      yhik,
+      kogus,
+      korvis: false
+    }
+    console.log(uusToode)
+    setOstud([...ostud, uusToode])
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Ostukorv</h1>
+      <UusOst lisaToode={lisaToode} />
+      <Ostukorv ostud={ostud} toggleKasKorvis={toggleKasKorvis} />
+      <h4>Ostukorvis on {ostud.filter(ost=>ost.korvis).length} toodet</h4>
     </div>
   );
 }
